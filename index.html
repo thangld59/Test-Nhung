@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flooring BoQ Estimator</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, select { margin: 5px; padding: 5px; }
+    table { border-collapse: collapse; margin-top: 20px; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+
+<h2>Flooring Work - Bill of Quantity Estimator</h2>
+
+<label>Room Length (m): <input type="number" id="length" step="0.1"></label>
+<label>Room Width (m): <input type="number" id="width" step="0.1"></label>
+<label>Flooring Type:
+  <select id="floorType">
+    <option value="tile">Tile</option>
+    <option value="laminate">Laminate</option>
+  </select>
+</label>
+<button onclick="calculateBoQ()">Calculate BoQ</button>
+
+<div id="boqOutput"></div>
+
+<script>
+function calculateBoQ() {
+  const length = parseFloat(document.getElementById('length').value);
+  const width = parseFloat(document.getElementById('width').value);
+  const type = document.getElementById('floorType').value;
+
+  if (isNaN(length) || isNaN(width) || length <= 0 || width <= 0) {
+    alert("Please enter valid room dimensions.");
+    return;
+  }
+
+  const area = length * width;
+  const areaWithWastage = +(area * 1.1).toFixed(2); // 10% wastage
+
+  let boq = [
+    { item: (type === "tile" ? "Floor Tiles" : "Laminate Planks"), unit: "m²", qty: areaWithWastage },
+    { item: (type === "tile" ? "Tile Adhesive" : "Laminate Underlay"), unit: "m²", qty: areaWithWastage },
+    { item: "Grout (for tiles)", unit: "kg", qty: (type === "tile" ? +(area * 0.3).toFixed(1) : "-") },
+    { item: "Edge Trim / Transition Strip", unit: "m", qty: 4 },
+    { item: "Skirting / Baseboard", unit: "m", qty: +(2 * (length + width)).toFixed(1) },
+    { item: "Screws / Clips", unit: "pcs", qty: 100 },
+    { item: "Primer (if needed)", unit: "liter", qty: 1 },
+    { item: "Leveling Compound (optional)", unit: "bag (25kg)", qty: 1 },
+    { item: "Cleaning Materials", unit: "lump sum", qty: 1 },
+    { item: "Labor (Installer)", unit: "day", qty: 1 }
+  ];
+
+  let html = <h3>Estimated Area: ${area.toFixed(2)} m² (With 10% Wastage: ${areaWithWastage} m²)</h3>;
+  html += <table><tr><th>No.</th><th>Item</th><th>Unit</th><th>Quantity</th></tr>;
+  boq.forEach((row, i) => {
+    html += <tr><td>${i + 1}</td><td>${row.item}</td><td>${row.unit}</td><td>${row.qty}</td></tr>;
+  });
+  html += "</table>";
+
+  document.getElementById("boqOutput").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
