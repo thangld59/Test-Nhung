@@ -54,10 +54,10 @@ function calculateBoQ() {
     { item: "Labor (Installer)", unit: "day", qty: 1 }
   ];
 
-  let html = <h3>Estimated Area: ${area.toFixed(2)} m² (With 10% Wastage: ${areaWithWastage} m²)</h3>;
-  html += <table><tr><th>No.</th><th>Item</th><th>Unit</th><th>Quantity</th></tr>;
+  let html = `<h3>Estimated Area: ${area.toFixed(2)} m² (With 10% Wastage: ${areaWithWastage} m²)</h3>`;
+  html += `<table><tr><th>No.</th><th>Item</th><th>Unit</th><th>Quantity</th></tr>`;
   boq.forEach((row, i) => {
-    html += <tr><td>${i + 1}</td><td>${row.item}</td><td>${row.unit}</td><td>${row.qty}</td></tr>;
+    html += `<tr><td>${i + 1}</td><td>${row.item}</td><td>${row.unit}</td><td>${row.qty}</td></tr>`;
   });
   html += "</table>";
 
